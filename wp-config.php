@@ -1,16 +1,39 @@
 <?php
+// Configure local-config.php with the production and staging site hostnames
+// local-config MUST declare $production_host and $staging_host
+if ( ! file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
+		header('X-WP-Error: config', true, 500);
+		echo '<h1>Configuration file is missing!</h1>';
+		echo "<p>If this is in production, deployment is broken.</p>";
+		die(1);
+}
+
 // ===================================================
 // Load database info and local development parameters
 // ===================================================
-if ( file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
-	define( 'WP_LOCAL_DEV', true );
-	include( dirname( __FILE__ ) . '/local-config.php' );
-} else {
-	define( 'WP_LOCAL_DEV', false );
-	define( 'DB_NAME', '%%DB_NAME%%' );
-	define( 'DB_USER', '%%DB_USER%%' );
-	define( 'DB_PASSWORD', '%%DB_PASSWORD%%' );
-	define( 'DB_HOST', '%%DB_HOST%%' ); // Probably 'localhost'
+if (isset($production_host) && $_SERVER['HTTP_HOST'] =~ $production_host) {
+	if ( ! file_exists( dirname(__FILE__) . '/local-production-config.php' ) ) {
+		header('X-WP-Error: config', true, 500);
+		echo '<h1>Production configuration file is missing!</h1>';
+		echo "<p>If this is in production, deployment is broken.</p>";
+		die(1);
+	}
+}
+elseif (isset($staging_host) && $_SERVER['HTTP_HOST'] =~ $staging_host) {
+	if ( ! file_exists( dirname(__FILE__) . '/local-staging-config.php' ) ) {
+		header('X-WP-Error: config', true, 500);
+		echo '<h1>Staging configuration file is missing!</h1>';
+		echo "<p>If this is in production, deployment is broken.</p>";
+		die(1);
+	}
+}
+else {
+	if ( ! file_exists( dirname(__FILE__) . '/local-staging-config.php' ) ) {
+		header('X-WP-Error: config', true, 500);
+		echo '<h1>Local configuration file is missing!</h1>';
+		echo "<p>If this is in production, deployment is broken.</p>";
+		die(1);
+	}
 }
 
 // ========================
@@ -42,7 +65,7 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
 // Table prefix
 // Change this if you have multiple installs in the same database
 // ==============================================================
-$table_prefix  = 'wp_';
+$table_prefix  = 'sz';
 
 // ================================
 // Language
@@ -69,9 +92,9 @@ define( 'WP_DEBUG_DISPLAY', false );
 if ( file_exists( dirname( __FILE__ ) . '/memcached.php' ) )
 	$memcached_servers = include( dirname( __FILE__ ) . '/memcached.php' );
 
-// ===========================================================================================
+// ===========================================================================
 // This can be used to programatically set the stage when deploying (e.g. production, staging)
-// ===========================================================================================
+// ===========================================================================
 define( 'WP_STAGE', '%%WP_STAGE%%' );
 define( 'STAGING_DOMAIN', '%%WP_STAGING_DOMAIN%%' ); // Does magic in WP Stack to handle staging domain rewriting
 

@@ -1,5 +1,11 @@
 # WordPress Skeleton
 
+This is a fork of Mark Jaquith's Wordpress-Skeleton. Created purely for my
+own needs, no guarantee of sensibleness, or timeliness to updates at
+present
+
+Original README.md follows:
+
 This is simply a skeleton repo for a WordPress site. Use it to jump-start your WordPress site repos, or fork it and customize it to your own liking!
 
 ## Assumptions
