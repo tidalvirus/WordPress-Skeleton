@@ -7,6 +7,7 @@ if ( ! file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
 		echo "<p>If this is in production, deployment is broken.</p>";
 		die(1);
 }
+require_once( dirname( __FILE__ ) . '/local-config.php' );
 
 // ===================================================
 // Load database info and local development parameters
