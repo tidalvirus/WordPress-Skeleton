@@ -11,21 +11,23 @@ if ( ! file_exists( dirname( __FILE__ ) . '/local-config.php' ) ) {
 // ===================================================
 // Load database info and local development parameters
 // ===================================================
-if (isset($production_host) && $_SERVER['HTTP_HOST'] =~ $production_host) {
+if (isset($production_host) && $_SERVER['HTTP_HOST'] == $production_host) {
 	if ( ! file_exists( dirname(__FILE__) . '/local-production-config.php' ) ) {
 		header('X-WP-Error: config', true, 500);
 		echo '<h1>Production configuration file is missing!</h1>';
 		echo "<p>If this is in production, deployment is broken.</p>";
 		die(1);
 	}
+	require_once( dirname( __FILE__ ) . '/local-production-config.php' );
 }
-elseif (isset($staging_host) && $_SERVER['HTTP_HOST'] =~ $staging_host) {
+elseif (isset($staging_host) && $_SERVER['HTTP_HOST'] == $staging_host) {
 	if ( ! file_exists( dirname(__FILE__) . '/local-staging-config.php' ) ) {
 		header('X-WP-Error: config', true, 500);
 		echo '<h1>Staging configuration file is missing!</h1>';
 		echo "<p>If this is in production, deployment is broken.</p>";
 		die(1);
 	}
+	require_once( dirname( __FILE__ ) . '/local-staging-config.php' );
 }
 else {
 	if ( ! file_exists( dirname(__FILE__) . '/local-staging-config.php' ) ) {
@@ -34,6 +36,7 @@ else {
 		echo "<p>If this is in production, deployment is broken.</p>";
 		die(1);
 	}
+	require_once( dirname( __FILE__ ) . '/local-development-config.php' );
 }
 
 // ========================
@@ -65,7 +68,7 @@ define( 'NONCE_SALT',       'put your unique phrase here' );
 // Table prefix
 // Change this if you have multiple installs in the same database
 // ==============================================================
-$table_prefix  = 'sz';
+$table_prefix  = 'sz_';
 
 // ================================
 // Language
